@@ -1,18 +1,21 @@
 var path = require('path');
-
+var logger = require('./logger');
 const parse = require('./_parse');
 const createApp = require('./_create');
 const addEntities = require('./_entities');
 const addIntents = require('./_intents');
 const upload = require('./_upload');
 
+logger.writeLog ('logging', '************************************************************\n')
+logger.writeLog ('logging', 'Started Application at: '+new Date()+'\n')
 // Change these values
 // Get from https://www.luis.ai/user/settings
 const LUIS_programmaticKey = "YOUR_PROGRAMMATIC_KEY";
 //Change App Name here
-const LUIS_appName = "Sample App2";
+const LUIS_appName = "testApp5";
 const LUIS_appCulture = "en-us"; 
 const LUIS_versionId = "0.1";
+const EXISTING_LUIS_APP_ID = "f0f85002-291a-4bed-bbbd-57d21188057f";//if luis app already exists, //add ID here
 
 // NOTE: final output of add-utterances api named utterances.upload.json
 const downloadFile = "./IoT.csv";
@@ -36,6 +39,7 @@ var configAddUtterances = {
 
 /* create app parameters */
 var configCreateApp = {
+	EXISTING_APP_ID: EXISTING_LUIS_APP_ID,
     LUIS_subscriptionKey: LUIS_programmaticKey,
     LUIS_versionId: LUIS_versionId,
     appName: LUIS_appName,

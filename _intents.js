@@ -1,4 +1,5 @@
 
+var logger = require('./logger');
 var rp = require('request-promise');
 var fse = require('fs-extra');
 var path = require('path');
@@ -57,7 +58,7 @@ var addIntents = async (config) => {
     }, this);
 
     let results = await Promise.all(intentPromises);
-    console.log(`Results of all promises = ${JSON.stringify(results)}`);
+    //console.log(`Results of all promises = ${JSON.stringify(results)}`);
     let response = results;
 
 
@@ -69,6 +70,18 @@ var callAddIntent = async (options) => {
 
         var response;        
         response = await request(options);
+		/////////////////////////////////////////////////
+		if( response.error && response.error.message.indexOf("already exist")){
+				logger.writeLog ('logging', new Date()+ ': Intent {'+options.body.name+'} already exists, Skipped\n')
+		console.log(`Intent {${options.body.name}} Already Exists, Skipping`);
+		}
+		else if(response.error)
+		console.log(`error in callAddIntent: ${response.error.message}`);
+		else
+		{
+		logger.writeLog ('logging', new Date()+ ': Intent {'+options.body.name+'} Added successfully\n')
+        //console.log(`error in callAddIntent: ${response.error.message}`);
+		}
         return { response: response };
 
     } catch (err) {

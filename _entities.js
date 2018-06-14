@@ -1,6 +1,6 @@
 // node 7.x
 // uses async/await - promises
-
+var logger = require('./logger');
 const request = require("requestretry");
 var rp = require('request-promise');
 var fse = require('fs-extra');
@@ -58,7 +58,7 @@ var addEntities = async (config) => {
         }
     }, this);
     let results = await Promise.all(entityPromises);
-    console.log(`Results of all promises = ${JSON.stringify(results)}`);
+   // console.log(`Results of all promises = ${JSON.stringify(results)}`);
     let response = results;// await fse.writeJson(createResults.json, results);
 
 
@@ -70,6 +70,18 @@ var callAddEntity = async (options) => {
 
         var response;        
         response = await request(options);
+		/////////////////////////////////////////////////
+		if(response.error && response.error.message.indexOf("already exist")){
+				console.log(`Entity {${options.body.name}} Already Exists, Skipping`);
+				logger.writeLog ('logging', new Date()+ ': Entity {'+options.body.name+'} already exists, Skipped\n')
+		}
+		else if(response.error)
+		console.log(`error in callAddEntity: ${response.error.message}`);
+		else
+		{
+		logger.writeLog ('logging', new Date()+ ': Entity {'+options.body.name+'} Added successfully\n')
+        //console.log(`error in callAddEntity: ${response.error.message}`);
+		}
         return { response: response };
 
     } catch (err) {

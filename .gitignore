@@ -1,0 +1,4 @@
+**/node_modules/
+**/logging.txt
+**/utterances.json
+**/utterances.upload.json

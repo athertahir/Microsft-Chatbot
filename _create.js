@@ -1,11 +1,11 @@
 // node 7.x
 // uses async/await - promises
-
+var logger = require('./logger');
 var rp = require('request-promise');
 var fse = require('fs-extra');
 var path = require('path');
 
-
+var exists=false;
 
 // main function to call
 // Call Apps_Create
@@ -29,13 +29,24 @@ var createApp = async (config) => {
                 },
                 json: true,
                 body: jsonBody
-            });
+            },config.EXISTING_APP_ID);
     
             let results = await createAppPromise;
 
             // Create app returns an app ID
-            let appId = results.response;  
-            console.log(`Called createApp, created app with ID ${appId}`);
+			let appId="abc";
+			if(exists)
+			{
+				logger.writeLog ('logging', new Date()+ ': LUIS Model: '+config.appName+' already exists\n')
+				appId = results; 
+				console.log(`Called createApp, App Already Exists with ID ${appId}`);
+			}
+			else
+			{
+				logger.writeLog ('logging', new Date()+ ': LUIS Model: '+config.appName+' created \n')
+				appId = results.response; 				
+				console.log(`Called createApp, created app with ID ${appId}`);
+			}
             return appId;
 
     
@@ -47,7 +58,7 @@ var createApp = async (config) => {
     }
 
 // Send JSON as the body of the POST request to the API
-var callCreateApp = async (options) => {
+var callCreateApp = async (options, applicationID) => {
     try {
 
         var response; 
@@ -57,10 +68,18 @@ var callCreateApp = async (options) => {
             response = await rp.get(options);
         }
         // response from successful create should be the new app ID
+		exists=false;
         return { response };
 
     } catch (err) {
-        throw err;
+		if(err.message.indexOf("already exist")){
+			exists=true;
+			//var response="cfeab95c-890f-44a8-8afe-bc6414ae62a5" ;
+			console.log("Application ID: "+ applicationID);
+			return applicationID;
+		}
+		else
+			throw err;
     }
 } 
 
