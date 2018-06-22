@@ -11,7 +11,7 @@ logger.writeLog ('logging', '***************************************************
 logger.writeLog ('logging', 'Started Application at: '+new Date()+'\n')
 // Change these values
 // Get from https://www.luis.ai/user/settings
-const LUIS_programmaticKey = "638ee9aeb729407aa09215840a0cae05";
+const LUIS_programmaticKey = "YOUR_PROGRAMMATIC_KEY";
 //Change App Name here
 const LUIS_appName = "testApp";
 const LUIS_appCulture = "en-us"; 
