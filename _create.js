@@ -29,7 +29,7 @@ var createApp = async (config) => {
                 },
                 json: true,
                 body: jsonBody
-            },config.EXISTING_APP_ID);
+            });
     
             let results = await createAppPromise;
 
@@ -37,9 +37,9 @@ var createApp = async (config) => {
 			let appId="abc";
 			if(exists)
 			{
-				logger.writeLog ('logging', new Date()+ ': LUIS Model: '+config.appName+' already exists\n')
+				//logger.writeLog ('logging', new Date()+ ': LUIS Model: '+config.appName+' already exists\n')
 				appId = results; 
-				console.log(`Called createApp, App Already Exists with ID ${appId}`);
+				//console.log(`Called createApp, App Already Exists with ID ${appId}`);
 			}
 			else
 			{
@@ -58,7 +58,7 @@ var createApp = async (config) => {
     }
 
 // Send JSON as the body of the POST request to the API
-var callCreateApp = async (options, applicationID) => {
+var callCreateApp = async (options) => {
     try {
 
         var response; 
@@ -75,8 +75,8 @@ var callCreateApp = async (options, applicationID) => {
 		if(err.message.indexOf("already exist")){
 			exists=true;
 			//var response="cfeab95c-890f-44a8-8afe-bc6414ae62a5" ;
-			console.log("Application ID: "+ applicationID);
-			return applicationID;
+			//console.log("Application ID: "+ applicationID);
+			return "-AlreadyExists";
 		}
 		else
 			throw err;
