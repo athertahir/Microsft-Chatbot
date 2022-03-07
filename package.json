@@ -15,6 +15,6 @@
     "line-reader": "^0.4.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "requestretry": "^1.12.2"
+    "requestretry": "^7.0.0"
   }
 }
